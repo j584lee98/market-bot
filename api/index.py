@@ -20,3 +20,5 @@ def chat_endpoint():
 @router.get("/health")
 def health_check():
     return {"status": "ok"}
+
+app.include_router(router)
