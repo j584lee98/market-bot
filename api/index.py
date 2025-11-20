@@ -1,11 +1,13 @@
 import os
-from fastapi import FastAPI
+from fastapi import FastAPI, APIRouter
 from openai import OpenAI
 
 app = FastAPI()
 openai = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-@app.get("/api/chat")
+router = APIRouter(prefix="/api")
+
+@router.get("/chat")
 def chat_endpoint():
     response = openai.chat.completions.create(
         model="gpt-4o",
@@ -15,6 +17,6 @@ def chat_endpoint():
     )
     return {"response": response.choices[0].message.content}
 
-@app.get("/api/health")
+@router.get("/health")
 def health_check():
     return {"status": "ok"}
