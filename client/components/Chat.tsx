@@ -56,7 +56,17 @@ export default function Chat() {
     <ChatLayout
       header={<ChatHeader />}
       messages={<ChatMessageList messages={messages} />}
-      input={<ChatInput onSend={handleSend} />}
+      inputArea={
+        <div className="space-y-2">
+          {isLoading && (
+            <div className="flex items-center gap-2 text-xs text-zinc-400">
+              <span className="flex h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
+              <span>Market Bot is thinking…</span>
+            </div>
+          )}
+          <ChatInput onSend={handleSend} />
+        </div>
+      }
     />
   );
 }

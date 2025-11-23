@@ -5,10 +5,10 @@ import type { ReactNode } from "react";
 type ChatLayoutProps = {
   header: ReactNode;
   messages: ReactNode;
-  input: ReactNode;
+  inputArea: ReactNode;
 };
 
-export function ChatLayout({ header, messages, input }: ChatLayoutProps) {
+export function ChatLayout({ header, messages, inputArea }: ChatLayoutProps) {
   return (
     <div className="flex h-dvh w-full flex-col bg-zinc-950 text-zinc-50">
       <div className="mx-auto flex h-full w-full max-w-4xl flex-col bg-zinc-950/60">
@@ -17,8 +17,8 @@ export function ChatLayout({ header, messages, input }: ChatLayoutProps) {
           {messages}
         </div>
         <div className="pointer-events-auto fixed inset-x-0 bottom-0 z-10 bg-zinc-950/90 backdrop-blur">
-          <div className="mx-auto w-full max-w-4xl px-3 py-3 sm:px-4 sm:py-4">
-            {input}
+          <div className="mx-auto w-full max-w-4xl px-3 py-3 sm:px-4 sm:py-4 space-y-2">
+            {inputArea}
           </div>
         </div>
       </div>
