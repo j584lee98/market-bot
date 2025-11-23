@@ -3,3 +3,6 @@ uvicorn
 openai
 mcp
 yfinance
+langchain
+langchain-mcp-adapters
+langchain-openai

@@ -1,10 +1,10 @@
 import os
 from fastapi import FastAPI, APIRouter, Body, HTTPException
 from pydantic import BaseModel
-from openai import OpenAI
+
+from utils.model import get_chat_completion
 
 app = FastAPI()
-openai = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 router = APIRouter(prefix="/api")
 
@@ -15,17 +15,13 @@ class ChatResponse(BaseModel):
     response: str
 
 @router.post("/chat", response_model=ChatResponse)
-def chat_endpoint(payload: ChatRequest = Body(...)):
-    """Accept a user message and return model completion."""
+async def chat_endpoint(payload: ChatRequest = Body(...)):
+    """Accept a user message and return model completion via utils.model."""
     user_message = payload.message.strip()
     if not user_message:
         raise HTTPException(status_code=400, detail="Message cannot be empty")
     try:
-        completion = openai.chat.completions.create(
-            model="gpt-4o",
-            messages=[{"role": "user", "content": user_message}],
-        )
-        content = completion.choices[0].message.content if completion.choices else ""
+        content = await get_chat_completion(user_message)
         return ChatResponse(response=content)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Model error: {e}")
