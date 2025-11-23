@@ -6,6 +6,7 @@ import { ChatInput } from "./chat-input";
 import { ChatLayout } from "./chat-layout";
 import type { ChatMessage } from "./chat-message-list";
 import { ChatMessageList } from "./chat-message-list";
+import { sendChatMessage } from "../lib/api";
 
 export default function Chat() {
   const [messages, setMessages] = useState<ChatMessage[]>([
@@ -17,11 +18,38 @@ export default function Chat() {
     },
   ]);
 
-  const handleSend = (text: string) => {
-    setMessages((prev) => [
-      ...prev,
-      { id: crypto.randomUUID(), role: "user", content: text },
-    ]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSend = async (text: string) => {
+    const userMessage: ChatMessage = {
+      id: crypto.randomUUID(),
+      role: "user",
+      content: text,
+    };
+
+    setMessages((prev) => [...prev, userMessage]);
+
+    try {
+      setIsLoading(true);
+      const data = await sendChatMessage(text);
+      const botMessage: ChatMessage = {
+        id: crypto.randomUUID(),
+        role: "bot",
+        content: data.response ?? "",
+      };
+      setMessages((prev) => [...prev, botMessage]);
+    } catch (error) {
+      const botMessage: ChatMessage = {
+        id: crypto.randomUUID(),
+        role: "bot",
+        content:
+          "Sorry, I ran into an error talking to the server. Please try again.",
+      };
+      setMessages((prev) => [...prev, botMessage]);
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
