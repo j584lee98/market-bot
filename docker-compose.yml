@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: client
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/app
+    environment:
+      - NODE_ENV=development
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./mcp:/app/mcp
+      - ./toolbox:/app/toolbox
+      - ./utils:/app/utils
+    environment:
+      - PYTHONUNBUFFERED=1
