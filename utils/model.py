@@ -24,7 +24,7 @@ def _build_chat_model() -> ChatOpenAI:
     sensible default.
     """
 
-    model_name = os.getenv("MODEL_NAME", "gpt-5-nano")
+    model_name = os.getenv("MODEL_NAME", "gpt-4.1-mini")
 
     return ChatOpenAI(
         model=model_name,
@@ -52,6 +52,23 @@ async def get_chat_completion(message: str) -> str:
     llm = _build_chat_model()
     agent = create_agent(llm, tools)
 
-    result: Any = agent.invoke({"messages": [{"role": "user", "content": text}]})
+    system_prompt = (
+        "You are Market Bot, a helpful financial research assistant. "
+        "Answer questions about stocks, ETFs, crypto, macro trends, and "
+        "trading ideas using only the information available from your tools "
+        "and general financial knowledge. Be concise, avoid speculation you "
+        "cannot justify, and highlight uncertainty when data is limited. "
+        "Always respond in Markdown, using headings, lists, and tables when helpful."
+        "When you output tables, use standard Markdown table formatting."
+    )
+
+    result: Any = agent.invoke(
+        {
+            "messages": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": text},
+            ]
+        }
+    )
 
     return result["messages"][-1].content

@@ -10,7 +10,6 @@ export function ChatHeader() {
         <span className="text-sm font-semibold text-zinc-50">
           Market Bot
         </span>
-        <span className="text-xs text-zinc-400">Ask about markets, trends, and more.</span>
       </div>
       <div className="ml-auto hidden items-center gap-2 text-xs text-zinc-400 sm:flex">
         <span className="h-2 w-2 rounded-full bg-emerald-400" />

@@ -1,6 +1,7 @@
 "use client";
 
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export type ChatRole = "user" | "bot";
 
@@ -29,7 +30,7 @@ export function ChatMessageBubble({ role, content }: ChatMessageBubbleProps) {
         }`}
       >
         <div className="prose prose-invert prose-sm max-w-none">
-          <ReactMarkdown>{content}</ReactMarkdown>
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
         </div>
       </div>
     </div>

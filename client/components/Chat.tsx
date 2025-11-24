@@ -14,7 +14,13 @@ export default function Chat() {
       id: "welcome-1",
       role: "bot",
       content:
-        "Hi, I’m **Market Bot**. Ask me about stocks, crypto, macro trends, or trading ideas.",
+        "Hi, I’m **Market Bot**, your research assistant for stocks, ETFs, crypto, and macro.\n\n" +
+        "I can help you with things like:\n\n" +
+        "- Recent price action and volatility for a symbol\n" +
+        "- Company news and major headlines\n" +
+        "- Past and upcoming earnings events\n" +
+        "- Analyst ratings, upgrades/downgrades, and price targets\n" +
+        "- A detailed snapshot of a company when you’re not sure what to look at",
     },
   ]);
 
