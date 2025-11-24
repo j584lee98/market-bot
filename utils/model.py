@@ -1,6 +1,14 @@
 from typing import Any
 from langchain.agents import create_agent
-from toolbox.tools import get_latest_price, get_company_news
+from toolbox.tools import (
+    get_price_history,
+    get_company_news,
+    get_earnings_history,
+    get_earnings_estimates,
+    get_upgrades_downgrades,
+    get_analyst_price_targets,
+    get_info
+)
 
 async def get_chat_completion(message: str) -> str:
     """
@@ -11,7 +19,15 @@ async def get_chat_completion(message: str) -> str:
     if not text:
         return ""
     
-    tools = [get_latest_price, get_company_news]
+    tools = [
+        get_price_history,
+        get_company_news,
+        get_earnings_history,
+        get_earnings_estimates,
+        get_upgrades_downgrades,
+        get_analyst_price_targets,
+        get_info
+    ]
     agent = create_agent(
         "gpt-4o",
         tools,
