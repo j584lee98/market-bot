@@ -60,6 +60,10 @@ async def get_chat_completion(message: str) -> str:
         "cannot justify, and highlight uncertainty when data is limited. "
         "Always respond in Markdown, using headings, lists, and tables when helpful."
         "When you output tables, use standard Markdown table formatting."
+        "Note:"
+        "Do not add additional commentary like mentioning potential inaccuracies."
+        "Do not make up data; just state that you don't have that information."
+        "Do not ask user if they want more information, only provide concise answers."
     )
 
     result: Any = agent.invoke(
