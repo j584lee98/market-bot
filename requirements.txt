@@ -6,3 +6,4 @@ yfinance
 langchain
 langchain-mcp-adapters
 langchain-openai
+langchain-community

@@ -29,8 +29,6 @@ async def create_mcp_client(servers: MCPServerConfig) -> MultiServerMCPClient:
     """
 
     client = MultiServerMCPClient(servers)
-    # Ensure all MCP servers are connected and tools are fetched lazily.
-    await client.await_startup()
     return client
 
 

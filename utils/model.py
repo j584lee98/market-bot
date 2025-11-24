@@ -1,58 +1,50 @@
-"""Model utilities for the Market Bot API.
-
-This module is responsible for constructing the LLM (and, later,
-any MCP-integrated tools/agents).  The FastAPI chat endpoint imports
-and calls the `get_chat_completion` coroutine from here so all model
-logic is centralized in one place.
-"""
-
-from __future__ import annotations
-
-import os
 from typing import Any, Dict
+from langchain_mcp_adapters.client import MultiServerMCPClient
+import yfinance as yf
+from langchain.agents import create_agent
+from langchain.tools import tool
+from langchain_community.agent_toolkits.load_tools import load_tools
+from langchain_community.tools.yahoo_finance_news import YahooFinanceNewsTool
 
-from openai import OpenAI
+@tool
+def get_latest_price(ticker="AAPL"):
+    """Get the latest stock price for a given ticker symbol."""
+    t = yf.Ticker(ticker)
+    last = t.history(period="5d").iloc[-1]
+    return {"symbol": ticker, "last_close": float(last["Close"]), "volume": int(last["Volume"])}
 
-# Single shared OpenAI client for the process.
-_client: OpenAI | None = None
-
-
-def _get_openai_client() -> OpenAI:
-    """Return a singleton OpenAI client instance.
-
-    This keeps connection management in one place and makes it easy to
-    later swap in a different provider or add MCP tooling.
-    """
-
-    global _client
-    if _client is None:
-        api_key = os.getenv("OPENAI_API_KEY")
-        if not api_key:
-            raise RuntimeError("OPENAI_API_KEY is not set")
-        _client = OpenAI(api_key=api_key)
-    return _client
-
+@tool
+def get_company_news(ticker="AAPL"):
+    """Get the latest news for a given ticker symbol."""
+    t = yf.Ticker(ticker)
+    yf.Market
+    news = t.news
+    return {"symbol": ticker, "news": news[:5]}
 
 async def get_chat_completion(message: str) -> str:
-    """Generate a chat completion for a single user message.
+    """Generate a chat completion using the MCP-enabled agent.
 
-    This is the function the FastAPI endpoint calls.  For now it uses
-    OpenAI's Chat Completions API directly; you can later extend this to
-    route via LangChain + MCP tools if desired.
+    The agent can call MCP tools (e.g. the yfinance server) as
+    needed to answer the user's question.
     """
 
     text = message.strip()
     if not text:
         return ""
+    
+    print(f"text: {text}")
 
-    client = _get_openai_client()
+    try:
+        tools = [get_latest_price, get_company_news]
+        agent = create_agent(
+            "gpt-4o",
+            tools
+        )
+    except Exception as e:
+        print(f"Error loading tools or creating agent: {e}")
 
-    # The OpenAI Python SDK is sync; run it in a thread when awaited
-    # from async contexts if needed.  Here we call it directly and
-    # return the result as an async function.
-    completion = client.chat.completions.create(
-        model="gpt-4o",
-        messages=[{"role": "user", "content": text}],
+    result = agent.invoke(
+        {"messages": [{"role": "user", "content": text}]}
     )
 
-    return completion.choices[0].message.content if completion.choices else ""
+    return result["messages"][-1].content

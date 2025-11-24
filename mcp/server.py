@@ -136,3 +136,6 @@ def get_summary(ticker: str) -> Dict[str, Optional[Any]]:
 			"ticker": symbol,
 			"error": str(exc),
 		}
+
+if __name__ == "__main__":
+    mcp.run(transport="stdio")
