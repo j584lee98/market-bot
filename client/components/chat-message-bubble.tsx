@@ -24,13 +24,13 @@ export function ChatMessageBubble({ role, content }: ChatMessageBubbleProps) {
         {isUser ? "You" : "MB"}
       </div>
       <div
-        className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm ${
+        className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm break-words ${
           isUser
             ? "bg-emerald-500 text-emerald-950"
             : "bg-zinc-900 text-zinc-50 ring-1 ring-zinc-800"
         }`}
       >
-        <div className="prose prose-invert prose-sm max-w-none">
+        <div className="prose prose-invert prose-sm max-w-none break-words">
           <ReactMarkdown
             remarkPlugins={[remarkGfm, remarkBreaks]}
           >
