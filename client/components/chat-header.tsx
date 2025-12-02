@@ -10,6 +10,9 @@ export function ChatHeader() {
         <span className="text-sm font-semibold text-zinc-50">
           Market Bot
         </span>
+        <span className="text-xs text-zinc-500">
+          {process.env.NEXT_PUBLIC_MODEL_NAME}
+        </span>
       </div>
       <a
         href="https://github.com/j584lee98/market-bot"

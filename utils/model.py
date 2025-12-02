@@ -20,11 +20,11 @@ def _build_chat_model() -> ChatOpenAI:
 
     Centralizing this makes it easy to tweak the model name,
     temperature, or other settings in one place. The model name
-    is read from the ``MODEL_NAME`` environment variable with a
+    is read from the ``NEXT_PUBLIC_MODEL_NAME`` environment variable with a
     sensible default.
     """
 
-    model_name = os.getenv("MODEL_NAME", "gpt-4.1-mini")
+    model_name = os.getenv("NEXT_PUBLIC_MODEL_NAME")
 
     return ChatOpenAI(
         model=model_name,
